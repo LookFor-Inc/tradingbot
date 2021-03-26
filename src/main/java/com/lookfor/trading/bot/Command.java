@@ -13,8 +13,9 @@ public enum Command {
     HELP("help"),
     UPLOAD("upload"),
     TRADE("trade"),
-    TOOLS("tools");
-    
+    TOOLS("tools"),
+    BALANCE("balance");
+
     private final String cmd;
     private final String obj;
     private final String COMMAND_HANDLER = "CommandHandler";

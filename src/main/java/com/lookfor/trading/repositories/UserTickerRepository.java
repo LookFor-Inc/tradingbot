@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface UserTickerRepository extends JpaRepository<UserTicker, Long> {
+    List<UserTicker> findAllByUser(User user);
+
     Optional<UserTicker> findByUserAndName(User user, String name);
-    
-    List<UserTicker> findAllByUserId(int userId);
+
+    Optional<UserTicker> findByName(String name);
 }

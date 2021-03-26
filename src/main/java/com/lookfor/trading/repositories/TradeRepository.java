@@ -6,9 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
     boolean existsByStartAndStopAndUserTicker(Date start, Date stop, UserTicker userTicker);
+
+    List<Trade> findAllByUserTickerId(Long userTickerId);
 }

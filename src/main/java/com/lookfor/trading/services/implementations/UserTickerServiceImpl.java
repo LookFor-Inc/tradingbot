@@ -25,7 +25,13 @@ public class UserTickerServiceImpl implements UserTickerService {
     @Override
     @Transactional(readOnly = true)
     public List<UserTicker> findAllByUserId(int userId) {
-        return userTickerRepository.findAllByUserId(userId);
+        Optional<User> userOptional = userService.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+
+        return userTickerRepository.findAllByUser(userOptional.get());
     }
 
     @Override
@@ -61,5 +67,11 @@ public class UserTickerServiceImpl implements UserTickerService {
         }
 
         return userTickerRepository.findByUserAndName(userOptional.get(), name);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<UserTicker> findUserTickerByName(String name) {
+        return userTickerRepository.findByName(name);
     }
 }

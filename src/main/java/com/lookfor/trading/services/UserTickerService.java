@@ -36,4 +36,12 @@ public interface UserTickerService {
      * @return user ticker optional
      */
     Optional<UserTicker> findUserTickerByUserIdAndName(int userId, String name);
+
+    /**
+     * Find UserTicker by it's name
+     *
+     * @param name of the ticker
+     * @return user ticker optional
+     */
+    Optional<UserTicker> findUserTickerByName(String name);
 }
