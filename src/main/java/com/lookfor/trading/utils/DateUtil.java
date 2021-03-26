@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtil {
-    public static final String PATTERN = "dd.MM.yyyy";
+    public static final String PATTERN = "yyyyddMM";
 
     /**
      * Convert string date to Date object

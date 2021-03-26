@@ -15,7 +15,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UsersTickers {
+@Table(name = "users_tickers")
+public class UserTicker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -27,8 +28,9 @@ public class UsersTickers {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "usersTickers")
-    private Set<TickersData> tickersData;
+    @Singular("data")
+    @OneToMany(mappedBy = "usersTickers", cascade = CascadeType.ALL)
+    private Set<TickerData> tickersData;
 
     @OneToMany(mappedBy = "usersTickers")
     private Set<Trades> trades;

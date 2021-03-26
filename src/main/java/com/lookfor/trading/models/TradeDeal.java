@@ -15,7 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TradesDeals {
+@Table(name = "trades_deals")
+public class TradeDeal {
 
     public enum Type {
         PURCHASE, SALE;

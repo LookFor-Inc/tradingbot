@@ -22,5 +22,5 @@ public class User {
     private String username;
 
     @OneToMany(mappedBy = "user")
-    private Set<UsersTickers> usersTickers;
+    private Set<UserTicker> usersTickers;
 }

@@ -4,6 +4,7 @@ import com.lookfor.trading.bot.Command;
 import com.lookfor.trading.bot.handlers.IncorrectCommandHandler;
 import com.lookfor.trading.exceptions.CommandNotFoundException;
 import com.lookfor.trading.interfaces.RootCommandHandler;
+import com.lookfor.trading.parsers.DocumentParser;
 import com.lookfor.trading.parsers.TelegramMessageParser;
 import com.lookfor.trading.services.CommandService;
 import com.lookfor.trading.services.UserService;
@@ -13,8 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
 @Component
@@ -28,6 +32,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final UserService userService;
     private final CommandService commandService;
+    private final DocumentParser documentParser;
 
     @Override
     public String getBotUsername() {
@@ -46,14 +51,19 @@ public class TelegramBot extends TelegramLongPollingBot {
             return;
         }
         Message message = editedMessage ? update.getEditedMessage() : update.getMessage();
+        // Update user's info
+        userService.saveUpdates(message);
+
+        if (message.hasDocument()) {
+            documentParser.parse(this, message);
+            return;
+        }
+
         String messageText = message.getText();
 
         if (messageText.isEmpty()) {
             return;
         }
-
-        // Update user's info
-        userService.saveUpdates(message);
 
         RootCommandHandler<?> handler;
         try {
@@ -68,6 +78,20 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         // Start thread for parsing sent message
         parser.start();
+    }
+
+    public void sendToUser(int userId, String sourceText) {
+        try {
+            execute(
+                    SendMessage.builder()
+                            .chatId(String.valueOf(userId))
+                            .parseMode(ParseMode.MARKDOWN)
+                            .text(sourceText)
+                            .build()
+            );
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
 
