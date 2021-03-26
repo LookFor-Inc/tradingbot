@@ -9,9 +9,12 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
  * Command enum
  */
 public enum Command {
+    START("start"),
     HELP("help"),
+    UPLOAD("upload"),
+    TRADE("trade"),
     TOOLS("tools");
-
+    
     private final String cmd;
     private final String obj;
     private final String COMMAND_HANDLER = "CommandHandler";

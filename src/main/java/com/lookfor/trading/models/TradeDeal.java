@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * TradesDeals entity
+ * TradeDeal entity
  */
 @Getter
 @Setter
@@ -15,7 +15,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TradesDeals {
+@Table(name = "trades_deals")
+public class TradeDeal {
 
     public enum Type {
         PURCHASE, SALE;
@@ -45,5 +46,5 @@ public class TradesDeals {
     private Type type;
 
     @ManyToOne
-    private Trades trades;
+    private Trade trade;
 }

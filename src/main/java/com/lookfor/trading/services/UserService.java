@@ -22,7 +22,7 @@ public interface UserService {
      * @param id User's telegram id
      * @return persisted entity
      */
-    Optional<User> findById(Integer id);
+    Optional<User> findById(int id);
 
     /**
      * Save User's updates or create a new one
