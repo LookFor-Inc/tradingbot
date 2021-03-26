@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserTickerService {
-
     /**
      * Get list of all users tickers
      *
@@ -32,8 +31,9 @@ public interface UserTickerService {
     /**
      * Find UserTicker by it's name
      *
+     * @param userId id of the user
      * @param name of the ticker
      * @return user ticker optional
      */
-    Optional<UserTicker> findUserTickerByName(String name);
+    Optional<UserTicker> findUserTickerByUserIdAndName(int userId, String name);
 }

@@ -21,21 +21,25 @@ public class TradeServiceImpl implements TradeService {
     private final UserTickerService userTickerService;
 
     @Override
-    @Transactional
-    public void saveStartAndStopTime(String tickerName, Date start, Date stop) {
+    public void saveStartAndStopTime(String tickerName, int userId, Date start, Date stop) {
         Optional<UserTicker> userTickerOptional =
-                userTickerService.findUserTickerByName(tickerName);
+                userTickerService.findUserTickerByUserIdAndName(userId, tickerName);
         if (userTickerOptional.isEmpty()) {
             throw new EntityNotFoundException(String.format("User ticker not found %s", tickerName));
         }
         UserTicker userTicker = userTickerOptional.get();
+        start.setDate(userTicker.getDate().getDate());
+        start.setMonth(userTicker.getDate().getMonth());
+        start.setYear(userTicker.getDate().getYear());
+        stop.setDate(userTicker.getDate().getDate());
+        stop.setMonth(userTicker.getDate().getMonth());
+        stop.setYear(userTicker.getDate().getYear());
         Trade trade = Trade.builder()
                 .start(start)
                 .stop(stop)
                 .balance(new BigDecimal(1_000_000))
+                .userTicker(userTicker)
                 .build();
         tradeRepository.save(trade);
-        System.out.println(userTicker.getTrades());
-        userTicker.getTrades().add(trade);
     }
 }

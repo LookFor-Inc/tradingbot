@@ -1,5 +1,6 @@
 package com.lookfor.trading.services.implementations;
 
+import com.lookfor.trading.exceptions.UserNotFoundException;
 import com.lookfor.trading.models.User;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.repositories.UserTickerRepository;
@@ -46,12 +47,18 @@ public class UserTickerServiceImpl implements UserTickerService {
             log.info("User ticker successfully saved!");
             return true;
         }
-
         return false;
     }
-    
+
+    @Override
     @Transactional(readOnly = true)
-    public Optional<UserTicker> findUserTickerByName(String name) {
-        return userTickerRepository.findByName(name);
+    public Optional<UserTicker> findUserTickerByUserIdAndName(int userId, String name) {
+        Optional<User> userOptional = userService.findById(userId);
+
+        if (userOptional.isEmpty()) {
+            throw new UserNotFoundException(userId);
+        }
+
+        return userTickerRepository.findByUserAndName(userOptional.get(), name);
     }
 }
