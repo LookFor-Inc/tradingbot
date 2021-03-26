@@ -10,6 +10,7 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
  */
 public enum Command {
     START("start"),
+    TOOLS("tools"),
     HELP("help");
 
     private final String cmd;
