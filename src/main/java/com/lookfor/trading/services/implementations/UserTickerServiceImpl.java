@@ -36,6 +36,11 @@ public class UserTickerServiceImpl implements UserTickerService {
     }
 
     @Override
+    public boolean existsByUserAndName(int userId, String name) {
+        return userTickerRepository.existsByUserAndName(userId, name);
+    }
+
+    @Override
     @Transactional
     public boolean save(UserTicker userTicker, int userId) {
         Optional<User> userOptional = userService.findById(userId);

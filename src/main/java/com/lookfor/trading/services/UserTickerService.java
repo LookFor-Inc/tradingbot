@@ -22,6 +22,15 @@ public interface UserTickerService {
     List<String> getAllUserTickerNames();
 
     /**
+     * Check UserTicker existence
+     *
+     * @param userId User's telegram id
+     * @param name Ticker name
+     * @return existence
+     */
+    boolean existsByUserAndName(int userId, String name);
+
+    /**
      * Save user's ticker data
      *
      * @param userTicker UserTicker object

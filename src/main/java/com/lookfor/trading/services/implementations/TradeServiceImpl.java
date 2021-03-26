@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,5 +38,10 @@ public class TradeServiceImpl implements TradeService {
         tradeRepository.save(trade);
         System.out.println(userTicker.getTrades());
         userTicker.getTrades().add(trade);
+    }
+
+    @Override
+    public List<Trade> findAllByUserId(int userId) {
+        return tradeRepository.findAllByUserId(userId);
     }
 }

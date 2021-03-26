@@ -36,9 +36,7 @@ public class DocumentParser {
             var csv = bot.downloadFile(filePath);
             UserTicker userTicker = converter.convert(csv);
 
-            Optional<UserTicker> userTickerOptional = userTickerService.findUserTickerByName(userTicker.getName());
-
-            if (userTickerOptional.isPresent()) {
+            if (userTickerService.existsByUserAndName(userId, userTicker.getName())) {
                 bot.sendToUser(userId,
                         String.format("You can not upload multiple csv with the same ticker name: %s!", userTicker.getName())
                 );
