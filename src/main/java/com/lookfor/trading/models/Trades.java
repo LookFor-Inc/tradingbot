@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "trades")
+@Table(name = "trade")
 public class Trades {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class Trades {
     private boolean status;
 
     @ManyToOne
-    private UsersTickers usersTickers;
+    private UserTicker usersTickers;
 
     @OneToMany(mappedBy = "trades")
-    private Set<TradesDeals> tradesDeals;
+    private Set<TradeDeal> tradesDeals;
 }

@@ -1,8 +1,8 @@
 package com.lookfor.trading.services.implementations;
 
 import com.lookfor.trading.models.User;
-import com.lookfor.trading.models.UsersTickers;
-import com.lookfor.trading.repositories.UsersTickersRepository;
+import com.lookfor.trading.models.UserTicker;
+import com.lookfor.trading.repositories.UserTickerRepository;
 import com.lookfor.trading.services.UserService;
 import com.lookfor.trading.services.UsersTickersService;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +17,23 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UsersTickersServiceImpl implements UsersTickersService {
-    private final UsersTickersRepository usersTickersRepository;
+    private final UserTickerRepository userTickerRepository;
     private final UserService userService;
 
     @Override
     public List<String> getAllUsersTickersNames() {
-        return usersTickersRepository.findAllNames();
+        return userTickerRepository.findAllNames();
     }
 
     @Override
     @Transactional
-    public boolean save(UsersTickers userTicker, int userId) {
+    public boolean save(UserTicker userTicker, int userId) {
         Optional<User> userOptional = userService.findById(userId);
 
         if (userOptional.isPresent()) {
             userTicker.setUser(userOptional.get());
 
-            usersTickersRepository.save(userTicker);
+            userTickerRepository.save(userTicker);
             log.info("User ticker successfully saved!");
             return true;
         }

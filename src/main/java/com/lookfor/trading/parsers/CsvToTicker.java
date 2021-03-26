@@ -1,9 +1,8 @@
 package com.lookfor.trading.parsers;
 
 import com.lookfor.trading.exceptions.IncorrectRequestException;
-import com.lookfor.trading.models.TickersData;
-import com.lookfor.trading.models.User;
-import com.lookfor.trading.models.UsersTickers;
+import com.lookfor.trading.models.TickerData;
+import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.utils.DateUtil;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,8 @@ import java.math.BigDecimal;
 public class CsvToTicker {
     public static final String HEADER_PATTERN = "<TICKER>;<PER>;<DATE>;<TIME>;<LAST>;<VOL>";
 
-    public UsersTickers convert(File csv) throws IncorrectRequestException {
-        UsersTickers.UsersTickersBuilder builder = UsersTickers.builder();
+    public UserTicker convert(File csv) throws IncorrectRequestException {
+        UserTicker.UserTickerBuilder builder = UserTicker.builder();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csv))) {
             String line = reader.readLine();
@@ -28,7 +27,7 @@ public class CsvToTicker {
 
             while (line != null) {
                 arr = line.split(";");
-                TickersData data = TickersData.builder()
+                TickerData data = TickerData.builder()
                         .date(arr[2])
                         .time(arr[3])
                         .lastPrice(new BigDecimal(arr[4]))

@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 public class DocumentParser {
     private final CsvToTicker converter;
-    private final UsersTickersService usersTickersService;
+    private final UsersTickersService userTickerService;
 
     @Async
     public void parse(TelegramBot bot, Message message) {
@@ -31,7 +31,7 @@ public class DocumentParser {
             }
 
             var csv = bot.downloadFile(filePath);
-            boolean status = usersTickersService.save(converter.convert(csv), userId);
+            boolean status = userTickerService.save(converter.convert(csv), userId);
 
             if (status) {
                 bot.sendToUser(userId, "Ticker successfully saved!");

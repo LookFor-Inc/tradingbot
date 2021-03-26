@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * TickersData entity
@@ -16,13 +15,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "tickers_data")
-public class TickersData {
+public class TickerData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
-    private UsersTickers usersTickers;
+    private UserTicker usersTickers;
 
     private String date;
 

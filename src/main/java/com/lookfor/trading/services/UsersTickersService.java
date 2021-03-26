@@ -1,6 +1,6 @@
 package com.lookfor.trading.services;
 
-import com.lookfor.trading.models.UsersTickers;
+import com.lookfor.trading.models.UserTicker;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface UsersTickersService {
      * @param userTicker UserTicker object
      * @param userId User's telegram id
      */
-    boolean save(UsersTickers userTicker, int userId);
+    boolean save(UserTicker userTicker, int userId);
 }

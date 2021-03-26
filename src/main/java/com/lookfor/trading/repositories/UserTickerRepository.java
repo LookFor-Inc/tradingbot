@@ -1,6 +1,6 @@
 package com.lookfor.trading.repositories;
 
-import com.lookfor.trading.models.UsersTickers;
+import com.lookfor.trading.models.UserTicker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface UsersTickersRepository extends JpaRepository<UsersTickers, Long> {
+public interface UserTickerRepository extends JpaRepository<UserTicker, Long> {
 
     @Query(value = "SELECT Name FROM UsersTickers", nativeQuery = true)
     List<String> findAllNames();
