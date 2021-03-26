@@ -1,5 +1,6 @@
 package com.lookfor.trading.services.implementations;
 
+import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.models.Trade;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.repositories.TradeRepository;
@@ -21,12 +22,15 @@ public class TradeServiceImpl implements TradeService {
     private final UserTickerService userTickerService;
 
     @Override
+    @Transactional
     public void saveStartAndStopTime(String tickerName, int userId, Date start, Date stop) {
         Optional<UserTicker> userTickerOptional =
                 userTickerService.findUserTickerByUserIdAndName(userId, tickerName);
+
         if (userTickerOptional.isEmpty()) {
             throw new EntityNotFoundException(String.format("User ticker not found %s", tickerName));
         }
+
         UserTicker userTicker = userTickerOptional.get();
         start.setDate(userTicker.getDate().getDate());
         start.setMonth(userTicker.getDate().getMonth());
@@ -34,6 +38,11 @@ public class TradeServiceImpl implements TradeService {
         stop.setDate(userTicker.getDate().getDate());
         stop.setMonth(userTicker.getDate().getMonth());
         stop.setYear(userTicker.getDate().getYear());
+
+        if (tradeRepository.existsByStartAndStopAndUserTicker(start, stop, userTicker)) {
+            throw new IncorrectRequestException("❌ This trade is already added ❌");
+        }
+
         Trade trade = Trade.builder()
                 .start(start)
                 .stop(stop)

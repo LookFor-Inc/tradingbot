@@ -1,7 +1,7 @@
 package com.lookfor.trading.bot.handlers;
 
 import com.lookfor.trading.interfaces.RootCommandHandler;
-import com.lookfor.trading.services.UsersTickersService;
+import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,20 +14,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class ToolsCommandHandler implements RootCommandHandler<SendMessage> {
-    private final UsersTickersService userTickerService;
+    private final UserTickerService userTickerService;
 
     @Override
     public SendMessage doParse(Update update) {
         Message message = getReceivedMessage(update);
         StringBuilder sbResponse = new StringBuilder();
 
-        sbResponse.append("Вы можете начать торговлю, используя данные инструменты:\n");
-        userTickerService.getAllUsersTickersNames()
+        sbResponse.append("You can start trading using these tickers😇:\n");
+        userTickerService.getAllUserTickerNames()
                 .forEach(name -> sbResponse
                         .append("- ")
                         .append(name)
-                        .append('\n'));
-        System.out.println(sbResponse.toString());
+                        .append('\n')
+                );
+
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
                 .parseMode(ParseMode.MARKDOWN)

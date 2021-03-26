@@ -1,5 +1,6 @@
 package com.lookfor.trading.bot.handlers;
 
+import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.exceptions.UserNotFoundException;
 import com.lookfor.trading.interfaces.RootCommandHandler;
 import com.lookfor.trading.services.TradeService;
@@ -55,9 +56,9 @@ public class TradeCommandHandler implements RootCommandHandler<SendMessage> {
                         )
                 );
                 sbResponse.append("Trade started...🙃🙃🙃");
-            } catch (ParseException | UserNotFoundException | EntityNotFoundException exp) {
+            } catch (ParseException | IncorrectRequestException | UserNotFoundException | EntityNotFoundException exp) {
                 log.error(exp.getMessage());
-                sbResponse.append("Incorrect enter!");
+                sbResponse.append(exp.getMessage());
             }
         }
 
