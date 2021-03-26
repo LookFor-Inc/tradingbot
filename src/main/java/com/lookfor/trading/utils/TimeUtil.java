@@ -6,10 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Date utility
+ * Time utility
  */
-public class DateUtil {
-    public static final String PATTERN = "yyyyMMdd";
+public class TimeUtil {
+    public static final String PATTERN = "HH:mm:ss";
 
     /**
      * Convert string date to Date object
@@ -17,15 +17,10 @@ public class DateUtil {
      * @param str date in string format
      * @return Date object
      */
-    public static Date stringToDate(String str) {
+    public static Date stringToDate(String str) throws ParseException {
         SimpleDateFormat inputFormat = new SimpleDateFormat(PATTERN);
         Date date = null;
-
-        try {
-            date = inputFormat.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        date = inputFormat.parse(str);
 
         return date;
     }
