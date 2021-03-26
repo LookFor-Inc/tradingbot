@@ -26,6 +26,7 @@ public class UsersTickersServiceImpl implements UsersTickersService {
     }
 
     @Override
+    @Transactional
     public boolean save(UsersTickers userTicker, int userId) {
         Optional<User> userOptional = userService.findById(userId);
 
