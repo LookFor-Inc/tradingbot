@@ -2,11 +2,13 @@ package com.lookfor.trading.services.implementations;
 
 import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.models.Trade;
+import com.lookfor.trading.models.TradeDeal;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.repositories.TradeRepository;
 import com.lookfor.trading.services.TradeService;
 import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,12 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    public void saveStartAndStopTime(String tickerName, int userId, Date start, Date stop) {
+    public void saveStartAndStopTime(
+            String tickerName,
+            int userId,
+            Date start,
+            Date stop
+    ) throws IncorrectRequestException, EntityNotFoundException {
         Optional<UserTicker> userTickerOptional =
                 userTickerService.findUserTickerByUserIdAndName(userId, tickerName);
 
@@ -56,7 +64,7 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Trade> findAllByUserTickerId(Long userTickerId) {
+    public List<Trade> findAllByUserTickerId(long userTickerId) {
         return tradeRepository.findAllByUserTickerId(userTickerId);
     }
 
@@ -70,5 +78,21 @@ public class TradeServiceImpl implements TradeService {
     @Transactional(readOnly = true)
     public List<Trade> findAllByUserIdAndStatus(int userId, boolean status) {
         return null;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Set<TradeDeal> findAllTradeDealsByTradeId(long tradeId) throws EntityNotFoundException {
+        Optional<Trade> tradeOptional = tradeRepository.findById(tradeId);
+
+        if (tradeOptional.isEmpty()) {
+            throw new EntityNotFoundException("Trade was not found 😔");
+        }
+
+        Set<TradeDeal> tradeDeals = tradeOptional.get().getTradeDeals();
+        if (tradeDeals.isEmpty()) {
+            throw new EntityNotFoundException("You do not have any trade deals 😔");
+        }
+        return tradeDeals;
     }
 }
