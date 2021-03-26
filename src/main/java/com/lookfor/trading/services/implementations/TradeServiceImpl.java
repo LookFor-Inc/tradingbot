@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,4 +39,23 @@ public class TradeServiceImpl implements TradeService {
         System.out.println(userTicker.getTrades());
         userTicker.getTrades().add(trade);
     }
+
+    @Override
+    public boolean isTimeInPeriod(Date date) {
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public List<Trade> getRunningTrades(String format){
+        return tradeRepository.findRunningTrades(format);
+    }
+
+    /*@Override
+    @Transactional(readOnly = true)
+    public boolean isTimeInPeriod(Date date) {
+        return date.before(tradeRepository.findByStartTime)
+    }*/
+
+
 }

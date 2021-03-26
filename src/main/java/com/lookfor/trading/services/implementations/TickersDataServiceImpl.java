@@ -1,6 +1,7 @@
 package com.lookfor.trading.services.implementations;
 
 import com.lookfor.trading.models.TickerData;
+import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.repositories.TickerDataRepository;
 import com.lookfor.trading.services.TickersDateService;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +21,8 @@ public class TickersDataServiceImpl implements TickersDateService {
     private final TickerDataRepository tickerDataRepository;
 
     @Transactional(readOnly = true)
-    public List<TickerData> getTickersDateAfterFirstTimeAndBeforeRealTime(){
-        String lastTime="100000";
-
-        String realTime = "100100";
-        Calendar calendar = new GregorianCalendar();
-        realTime
-                .concat(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)))
-                .concat(String.valueOf(calendar.get(Calendar.MINUTE)))
-                .concat(String.valueOf(calendar.get(Calendar.SECOND)));
-        return tickerDataRepository.findTickersAfterLastTimeAndBeforeRealTime(realTime, lastTime);
+    public List<TickerData> getTickersDataAfterFirstTimeAndBeforeRealTime(String lastTime, String currentTime, UserTicker userTicker){
+        return tickerDataRepository.findTickersAfterLastTimeAndBeforeRealTime(currentTime, lastTime, userTicker);
     }
 
 }

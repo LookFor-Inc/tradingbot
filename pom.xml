@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>15</java.version>
+        <redis.version>2.4.3</redis.version>
 		<telegrambots.version>5.0.1</telegrambots.version>
     </properties>
 
@@ -35,6 +36,13 @@
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>${redis.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
