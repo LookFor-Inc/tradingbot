@@ -12,6 +12,7 @@ public enum Command {
     START("start"),
     HELP("help"),
     UPLOAD("upload"),
+    TRADE("trade"),
     TOOLS("tools");
     
     private final String cmd;

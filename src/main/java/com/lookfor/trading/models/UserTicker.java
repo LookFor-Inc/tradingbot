@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * UsersTickers entity
+ * UserTicker entity
  */
 @Getter
 @Setter
@@ -29,9 +29,9 @@ public class UserTicker {
     private User user;
 
     @Singular("data")
-    @OneToMany(mappedBy = "usersTickers", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userTicker", cascade = CascadeType.ALL)
     private Set<TickerData> tickersData;
 
-    @OneToMany(mappedBy = "usersTickers")
-    private Set<Trades> trades;
+    @OneToMany(mappedBy = "userTicker", cascade = CascadeType.ALL)
+    private Set<Trade> trades;
 }

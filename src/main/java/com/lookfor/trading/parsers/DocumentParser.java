@@ -2,7 +2,7 @@ package com.lookfor.trading.parsers;
 
 import com.lookfor.trading.config.TelegramBot;
 import com.lookfor.trading.exceptions.IncorrectRequestException;
-import com.lookfor.trading.services.UsersTickersService;
+import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @RequiredArgsConstructor
 public class DocumentParser {
     private final CsvToTicker converter;
-    private final UsersTickersService userTickerService;
+    private final UserTickerService userTickerService;
 
     @Async
     public void parse(TelegramBot bot, Message message) {

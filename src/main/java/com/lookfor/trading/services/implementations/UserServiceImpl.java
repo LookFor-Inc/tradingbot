@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Collections;
 import java.util.Optional;
 
 
@@ -24,8 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Integer telegramUserId) {
-        return userRepository.findById(telegramUserId);
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
     }
 
     @Override

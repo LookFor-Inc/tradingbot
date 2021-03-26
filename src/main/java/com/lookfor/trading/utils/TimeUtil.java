@@ -6,10 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Date utility
+ * Time utility
  */
-public class DateUtil {
-    public static final String PATTERN = "yyyyddMM";
+public class TimeUtil {
+    public static final String PATTERN = "HH:mm:ss";
 
     /**
      * Convert string date to Date object

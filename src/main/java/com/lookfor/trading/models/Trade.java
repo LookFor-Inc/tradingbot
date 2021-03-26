@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Set;
 
 /**
- * Trades entity
+ * Trade entity
  */
 @Getter
 @Setter
@@ -16,8 +16,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "trade")
-public class Trades {
+@Table(name = "trades")
+public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,8 +31,8 @@ public class Trades {
     private boolean status;
 
     @ManyToOne
-    private UserTicker usersTickers;
+    private UserTicker userTicker;
 
-    @OneToMany(mappedBy = "trades")
-    private Set<TradeDeal> tradesDeals;
+    @OneToMany(mappedBy = "trade")
+    private Set<TradeDeal> tradeDeals;
 }

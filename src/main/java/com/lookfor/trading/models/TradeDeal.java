@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * TradesDeals entity
+ * TradeDeal entity
  */
 @Getter
 @Setter
@@ -46,5 +46,5 @@ public class TradeDeal {
     private Type type;
 
     @ManyToOne
-    private Trades trades;
+    private Trade trade;
 }

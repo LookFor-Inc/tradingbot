@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 /**
- * TickersData entity
+ * TickerData entity
  */
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class TickerData {
     private long id;
 
     @ManyToOne
-    private UserTicker usersTickers;
+    private UserTicker userTicker;
 
     private String date;
 

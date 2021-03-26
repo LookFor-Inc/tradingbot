@@ -4,20 +4,20 @@ import com.lookfor.trading.models.User;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.repositories.UserTickerRepository;
 import com.lookfor.trading.services.UserService;
-import com.lookfor.trading.services.UsersTickersService;
+import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UsersTickersServiceImpl implements UsersTickersService {
+public class UserTickerServiceImpl implements UserTickerService {
     private final UserTickerRepository userTickerRepository;
     private final UserService userService;
 
@@ -48,5 +48,10 @@ public class UsersTickersServiceImpl implements UsersTickersService {
         }
 
         return false;
+    }
+    
+    @Transactional(readOnly = true)
+    public Optional<UserTicker> findUserTickerByName(String name) {
+        return userTickerRepository.findByName(name);
     }
 }
