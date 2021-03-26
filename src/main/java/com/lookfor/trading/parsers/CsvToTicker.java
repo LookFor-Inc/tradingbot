@@ -30,7 +30,7 @@ public class CsvToTicker {
                 TickerData data = TickerData.builder()
                         .date(arr[2])
                         .time(arr[3])
-                        .lastPrice(new BigDecimal(arr[4]))
+                        .lastPrice(arr[4])
                         .build();
 
                 builder.data(data);

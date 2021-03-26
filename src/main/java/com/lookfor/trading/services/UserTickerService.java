@@ -7,18 +7,18 @@ import java.util.Optional;
 
 public interface UserTickerService {
     /**
-     * Get list of all users tickers
+     * Find list of all users tickers by user id
      *
-     * @return list of the users tickers
+     * @return list of the users tickers by user id
      */
-    List<UserTicker> getAllUsersTickers();
+    List<UserTicker> findAllByUserId(int userId);
 
     /**
      * Get list of all users tickers names
      *
-     * @return list of all users tickers names
+     * @return list of all users tickers names by user id
      */
-    List<String> getAllUserTickerNames();
+    List<String> findAllUserTickerNames(int userId);
 
     /**
      * Save user's ticker data

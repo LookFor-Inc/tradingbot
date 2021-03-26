@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -21,13 +23,17 @@ public class ToolsCommandHandler implements RootCommandHandler<SendMessage> {
         Message message = getReceivedMessage(update);
         StringBuilder sbResponse = new StringBuilder();
 
-        sbResponse.append("You can start trading using these tickers😇:\n");
-        userTickerService.getAllUserTickerNames()
-                .forEach(name -> sbResponse
-                        .append("- ")
-                        .append(name)
-                        .append('\n')
-                );
+        List<String> userTickerNames = userTickerService.findAllUserTickerNames(message.getFrom().getId());
+
+        if (userTickerNames.size() == 0) {
+            sbResponse.append("You do not have any available tickers");
+        } else {
+            sbResponse.append("You can start trading using these tickers😇:\n");
+            userTickerNames.forEach(name -> sbResponse
+                    .append("- ")
+                    .append(name)
+                    .append('\n'));
+        }
 
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
