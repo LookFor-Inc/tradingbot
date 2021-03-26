@@ -2,6 +2,7 @@ package com.lookfor.trading.parsers;
 
 import com.lookfor.trading.config.TelegramBot;
 import com.lookfor.trading.exceptions.IncorrectRequestException;
+import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -10,6 +11,8 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +34,17 @@ public class DocumentParser {
             }
 
             var csv = bot.downloadFile(filePath);
+            UserTicker userTicker = converter.convert(csv);
+
+            Optional<UserTicker> userTickerOptional = userTickerService.findUserTickerByName(userTicker.getName());
+
+            if (userTickerOptional.isPresent()) {
+                bot.sendToUser(userId,
+                        String.format("You can not upload multiple csv with the same ticker name: %s!", userTicker.getName())
+                );
+                return;
+            }
+
             boolean status = userTickerService.save(converter.convert(csv), userId);
 
             if (status) {
