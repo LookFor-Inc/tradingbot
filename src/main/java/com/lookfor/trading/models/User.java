@@ -17,7 +17,10 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     @Id
-    private Integer id;
+    private int id;
 
     private String username;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UsersTickers> usersTickers;
 }
