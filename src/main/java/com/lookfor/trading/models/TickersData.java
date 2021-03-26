@@ -15,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "tickers_data")
 public class TickersData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +24,9 @@ public class TickersData {
     @ManyToOne
     private UsersTickers usersTickers;
 
-    private BigDecimal lastPrice;
+    private String date;
 
-    private Date time;
+    private String time;
+
+    private BigDecimal lastPrice;
 }

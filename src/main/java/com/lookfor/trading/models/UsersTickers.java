@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "users_tickers")
 public class UsersTickers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,8 @@ public class UsersTickers {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "usersTickers")
+    @Singular("data")
+    @OneToMany(mappedBy = "usersTickers", cascade = CascadeType.ALL)
     private Set<TickersData> tickersData;
 
     @OneToMany(mappedBy = "usersTickers")

@@ -80,7 +80,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         parser.start();
     }
 
-    public void sendToUser(Long userId, String sourceText) {
+    public void sendToUser(int userId, String sourceText) {
         try {
             execute(
                     SendMessage.builder()

@@ -11,7 +11,8 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
 public enum Command {
     START("start"),
     HELP("help"),
-    UPLOAD("upload");
+    UPLOAD("upload"),
+    TOOLS("tools");
 
     private final String cmd;
     private final String obj;
