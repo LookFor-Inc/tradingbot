@@ -28,5 +28,5 @@ public class TickerData {
 
     private String time;
 
-    private BigDecimal lastPrice;
+    private String lastPrice;
 }

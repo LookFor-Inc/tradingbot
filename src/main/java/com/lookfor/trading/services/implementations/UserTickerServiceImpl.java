@@ -42,6 +42,7 @@ public class UserTickerServiceImpl implements UserTickerService {
 
         if (userOptional.isPresent()) {
             userTicker.setUser(userOptional.get());
+            userTicker.getTickersData().forEach(data -> data.setUserTicker(userTicker));
             userTickerRepository.save(userTicker);
             log.info("User ticker successfully saved!");
             return true;
