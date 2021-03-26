@@ -9,7 +9,8 @@ import static com.google.common.base.CaseFormat.UPPER_UNDERSCORE;
  * Command enum
  */
 public enum Command {
-    HELP("help");
+    HELP("help"),
+    UPLOAD("upload");
 
     private final String cmd;
     private final String obj;
