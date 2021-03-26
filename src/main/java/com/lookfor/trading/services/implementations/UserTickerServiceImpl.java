@@ -23,14 +23,14 @@ public class UserTickerServiceImpl implements UserTickerService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserTicker> getAllUsersTickers() {
-        return userTickerRepository.findAll();
+    public List<UserTicker> findAllByUserId(int userId) {
+        return userTickerRepository.findAllByUserId(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<String> getAllUserTickerNames() {
-        return getAllUsersTickers().stream()
+    public List<String> findAllUserTickerNames(int userId) {
+        return findAllByUserId(userId).stream()
                 .map(UserTicker::getName)
                 .collect(Collectors.toList());
     }
@@ -50,7 +50,7 @@ public class UserTickerServiceImpl implements UserTickerService {
 
         return false;
     }
-    
+
     @Transactional(readOnly = true)
     public Optional<UserTicker> findUserTickerByName(String name) {
         return userTickerRepository.findByName(name);
