@@ -17,15 +17,10 @@ public class TimeUtil {
      * @param str date in string format
      * @return Date object
      */
-    public static Date stringToDate(String str) {
+    public static Date stringToDate(String str) throws ParseException {
         SimpleDateFormat inputFormat = new SimpleDateFormat(PATTERN);
         Date date = null;
-
-        try {
-            date = inputFormat.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        date = inputFormat.parse(str);
 
         return date;
     }

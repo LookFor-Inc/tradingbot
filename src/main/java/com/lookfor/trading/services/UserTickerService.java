@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserTickerService {
-
     /**
-     * Get list of all users tickers
+     * Find list of all users tickers by user id
      *
-     * @return list of the users tickers
+     * @return list of the users tickers by user id
      */
-    List<UserTicker> getAllUsersTickers();
+    List<UserTicker> findAllByUserId(int userId);
 
     /**
      * Get list of all users tickers names
      *
-     * @return list of all users tickers names
+     * @return list of all users tickers names by user id
      */
-    List<String> getAllUserTickerNames();
+    List<String> findAllUserTickerNames(int userId);
 
     /**
      * Check UserTicker existence
@@ -37,6 +36,15 @@ public interface UserTickerService {
      * @param userId User's telegram id
      */
     boolean save(UserTicker userTicker, int userId);
+
+    /**
+     * Find UserTicker by it's name
+     *
+     * @param userId id of the user
+     * @param name of the ticker
+     * @return user ticker optional
+     */
+    Optional<UserTicker> findUserTickerByUserIdAndName(int userId, String name);
 
     /**
      * Find UserTicker by it's name
