@@ -1,6 +1,8 @@
 package com.lookfor.trading.config;
 
 import com.lookfor.trading.bot.Command;
+import com.lookfor.trading.bot.handlers.IncorrectCommandHandler;
+import com.lookfor.trading.exceptions.CommandNotFoundException;
 import com.lookfor.trading.interfaces.RootCommandHandler;
 import com.lookfor.trading.parsers.DocumentParser;
 import com.lookfor.trading.parsers.TelegramMessageParser;
@@ -64,14 +66,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
         RootCommandHandler<?> handler;
-        Command command = commandService.findCommandInMessage(messageText);
-        handler = (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName());
-//        try {
-//            Command command = commandService.findCommandInMessage(messageText);
-//            handler = (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName());
-//        } catch (CommandNotFoundException exp) {
-//            TODO: Incorrect command handler
-//        }
+        try {
+            Command command = commandService.findCommandInMessage(messageText);
+            handler = (RootCommandHandler<?>) appContext.getBean(command.getHandlerBeanName());
+        } catch (CommandNotFoundException exp) {
+            handler = appContext.getBean(IncorrectCommandHandler.class);
+        }
 
         TelegramMessageParser parser =
                 new TelegramMessageParser(this, update, handler);
