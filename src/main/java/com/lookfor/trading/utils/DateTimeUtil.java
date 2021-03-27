@@ -52,4 +52,8 @@ public class DateTimeUtil {
         DateFormat formatter = new SimpleDateFormat(type.obj());
         return formatter.format(date);
     }
+
+    public static Date getNowDate() {
+        return new Date(System.currentTimeMillis());
+    }
 }

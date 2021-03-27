@@ -40,6 +40,9 @@ public class TradeDeal {
     private String time;
 
     @Digits(integer = 9, fraction = 9)
+    private BigDecimal balance;
+
+    @Digits(integer = 9, fraction = 9)
     private BigDecimal price;
 
     private long amount;

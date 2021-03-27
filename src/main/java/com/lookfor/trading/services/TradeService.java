@@ -13,16 +13,18 @@ import java.util.Set;
  * Service interface for managing {@link com.lookfor.trading.models.Trade}
  */
 public interface TradeService {
+
     /**
-     * Save start and stop time for executing trades for user's ticker
+     * Is need to start algorithm
      *
-     * @param tickerName name of the ticker
-     * @param userId id of the user
-     * @param start time
-     * @param stop time
+     * @param date Current date
      */
+    boolean isTimeInPeriod(Date date);
+
+    List<Trade> getRunningTrades(Date format);
+
     void saveStartAndStopTime(String tickerName, int userId, Date start, Date stop) throws IncorrectRequestException, EntityNotFoundException;
-    
+
     /**
      * Get all trade by user ticker id
      * @param userTickerId id
@@ -37,4 +39,6 @@ public interface TradeService {
      * @return all trade deals
      */
     Set<TradeDeal> findAllTradeDealsByTradeId(long tradeId) throws EntityNotFoundException;
+
+    void save(Trade trade);
 }

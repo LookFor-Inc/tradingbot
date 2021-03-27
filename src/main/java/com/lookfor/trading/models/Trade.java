@@ -32,6 +32,8 @@ public class Trade {
 
     private boolean status;
 
+    private long totalAmount;
+
     @ManyToOne
     private UserTicker userTicker;
 

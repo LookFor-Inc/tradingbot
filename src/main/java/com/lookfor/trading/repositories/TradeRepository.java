@@ -11,6 +11,9 @@ import java.util.List;
 
 @Repository
 public interface TradeRepository extends JpaRepository<Trade, Long> {
+
+    @Query(value = "select t from Trade t where :format between t.start and t.stop")
+    List<Trade> findRunningTrades(Date format);
     boolean existsByStartAndStopAndUserTicker(Date start, Date stop, UserTicker userTicker);
 
     List<Trade> findAllByUserTickerId(Long userTickerId);

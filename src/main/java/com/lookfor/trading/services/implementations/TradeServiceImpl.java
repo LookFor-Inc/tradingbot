@@ -8,7 +8,6 @@ import com.lookfor.trading.repositories.TradeRepository;
 import com.lookfor.trading.services.TradeService;
 import com.lookfor.trading.services.UserTickerService;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,12 +40,6 @@ public class TradeServiceImpl implements TradeService {
         }
 
         UserTicker userTicker = userTickerOptional.get();
-        start.setDate(userTicker.getDate().getDate());
-        start.setMonth(userTicker.getDate().getMonth());
-        start.setYear(userTicker.getDate().getYear());
-        stop.setDate(userTicker.getDate().getDate());
-        stop.setMonth(userTicker.getDate().getMonth());
-        stop.setYear(userTicker.getDate().getYear());
 
         if (tradeRepository.existsByStartAndStopAndUserTicker(start, stop, userTicker)) {
             throw new IncorrectRequestException("❌ This trade is already added ❌");
@@ -69,6 +62,25 @@ public class TradeServiceImpl implements TradeService {
     }
 
     @Override
+    public boolean isTimeInPeriod(Date date) {
+        return false;
+    }
+
+    @Override
+    @Transactional
+    public List<Trade> getRunningTrades(Date format){
+        //List<Trade> tradeList = tradeRepository.findAll();
+        //List<Trade> running = tradeList.forEach();
+        return tradeRepository.findRunningTrades(format);
+    }
+
+    /*@Override
+    @Transactional(readOnly = true)
+    public boolean isTimeInPeriod(Date date) {
+        return date.before(tradeRepository.findByStartTime)
+    }*/
+
+
     @Transactional(readOnly = true)
     public Set<TradeDeal> findAllTradeDealsByTradeId(long tradeId) throws EntityNotFoundException {
         Optional<Trade> tradeOptional = tradeRepository.findById(tradeId);
@@ -82,5 +94,11 @@ public class TradeServiceImpl implements TradeService {
             throw new EntityNotFoundException("You do not have any trade deals 😔");
         }
         return tradeDeals;
+    }
+
+    @Override
+    @Transactional
+    public void save(Trade trade) {
+        tradeRepository.save(trade);
     }
 }
