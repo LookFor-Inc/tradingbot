@@ -17,8 +17,8 @@ public class StartCommandHandler implements RootCommandHandler<SendMessage> {
                 .parseMode(ParseMode.MARKDOWN)
                 .text(
                         String.format(
-                                "Hello, %s! I am a trading bot!🤖\n\n", message.getFrom().getUserName())
-                                + "I can help you to trade💸 WOW! 🤪")
+                                "Hello, %s! I am a trading bot! 🤖\n\n", message.getFrom().getUserName())
+                                + "I can help you to trade 💸 WOW! 🤪")
                 .build();
     }
 }

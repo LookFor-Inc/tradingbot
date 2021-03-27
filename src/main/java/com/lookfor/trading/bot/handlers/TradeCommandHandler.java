@@ -4,7 +4,7 @@ import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.exceptions.UserNotFoundException;
 import com.lookfor.trading.interfaces.RootCommandHandler;
 import com.lookfor.trading.services.TradeService;
-import com.lookfor.trading.utils.TimeUtil;
+import com.lookfor.trading.utils.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,15 +36,14 @@ public class TradeCommandHandler implements RootCommandHandler<SendMessage> {
         StringBuilder sbResponse = new StringBuilder();
 
         if (restTextList.length < 3) {
-            sbResponse.append("Incorrect enter!");
+            sbResponse.append("Enter command */trade <HH:mm:ss> <HH:mm:ss> <ticker1, ticker2, ...>* to trade 📈");
         } else {
             try {
                 String[] timeParams = Arrays.copyOfRange(restTextList, 0, 2).clone();
                 List<String> tickerParams = Arrays.asList(Arrays.copyOfRange(restTextList, 2, restTextList.length).clone());
-                List<Date> convertedTime =
-                        new ArrayList<>();
+                List<Date> convertedTime = new ArrayList<>();
                 for (String timeParam : timeParams) {
-                    Date date = TimeUtil.stringToDate(timeParam);
+                    Date date = DateTimeUtil.stringToDate(timeParam, DateTimeUtil.PatternType.HH_MM_SS_COLON);
                     convertedTime.add(date);
                 }
                 tickerParams.forEach(ticker ->
@@ -55,7 +54,7 @@ public class TradeCommandHandler implements RootCommandHandler<SendMessage> {
                                 convertedTime.get(1)
                         )
                 );
-                sbResponse.append("Trade started...🙃🙃🙃");
+                sbResponse.append("Trade added 🙃🙃🙃");
             } catch (ParseException | IncorrectRequestException | UserNotFoundException | EntityNotFoundException exp) {
                 log.error(exp.getMessage());
                 sbResponse.append(exp.getMessage());

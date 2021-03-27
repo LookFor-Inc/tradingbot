@@ -13,7 +13,7 @@ public class UploadCommandHandler implements RootCommandHandler<SendMessage> {
         Message message = getReceivedMessage(update);
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
-                .text("Now you can send csv files with period of day.")
+                .text("😎 Now you can send CSV files with period of day 😎")
                 .build();
     }
 }

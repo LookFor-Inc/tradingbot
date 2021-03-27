@@ -26,11 +26,11 @@ public class ToolsCommandHandler implements RootCommandHandler<SendMessage> {
         List<String> userTickerNames = userTickerService.findAllUserTickerNames(message.getFrom().getId());
 
         if (userTickerNames.isEmpty()) {
-            sbResponse.append("You do not have any available tickers");
+            sbResponse.append("😔 You do not have any available tickers 😔");
         } else {
-            sbResponse.append("You can start trading using these tickers😇:\n");
+            sbResponse.append("You can start trading using these tickers 😇\n");
             userTickerNames.forEach(name -> sbResponse
-                    .append("- ")
+                    .append("⚪️ ")
                     .append(name)
                     .append('\n'));
         }

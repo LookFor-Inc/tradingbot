@@ -14,7 +14,8 @@ public enum Command {
     UPLOAD("upload"),
     TRADE("trade"),
     TOOLS("tools"),
-    BALANCE("balance");
+    BALANCE("balance"),
+    DOWNLOAD("download");
 
     private final String cmd;
     private final String obj;
