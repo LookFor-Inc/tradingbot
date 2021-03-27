@@ -47,7 +47,9 @@ public class TradeServiceImpl implements TradeService {
 
     @Override
     @Transactional
-    public List<Trade> getRunningTrades(String format){
+    public List<Trade> getRunningTrades(Date format){
+        //List<Trade> tradeList = tradeRepository.findAll();
+        //List<Trade> running = tradeList.forEach();
         return tradeRepository.findRunningTrades(format);
     }
 

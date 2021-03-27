@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,10 +18,12 @@ public class TradeScheduler {
     private final MainAlgorithm mainalgorithm;
 
     @Scheduled(fixedRate = 1000)
-    public void checkTrades(){
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss");
+    public void checkTrades() throws ParseException {
+        SimpleDateFormat currentTime = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        List<Trade> tradeList = tradeService.getRunningTrades(currentTime.format(date));
+        String format = "2021-01-21 11:15:11";
+        Date date1 = currentTime.parse(format);
+        List<Trade> tradeList = tradeService.getRunningTrades(date1);//currentTime.format(date));
 
         tradeList.forEach(mainalgorithm::doTask);
     }

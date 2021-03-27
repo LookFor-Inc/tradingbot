@@ -25,5 +25,5 @@ public interface TradeService {
      */
     boolean isTimeInPeriod(Date date);
 
-    List<Trade> getRunningTrades(String format);
+    List<Trade> getRunningTrades(Date format);
 }
