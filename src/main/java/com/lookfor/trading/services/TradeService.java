@@ -6,17 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Service interface for managing {@link Trade}
+ * Service interface for managing {@link com.lookfor.trading.models.Trade}
  */
 public interface TradeService {
-    /**
-     * Save start and stop time for executing trades for ticker
-     *
-     * @param tickerName name of the ticker
-     * @param start time
-     * @param stop time
-     */
-    void saveStartAndStopTime(String tickerName, Date start, Date stop);
 
     /**
      * Is need to start algorithm
@@ -26,4 +18,12 @@ public interface TradeService {
     boolean isTimeInPeriod(Date date);
 
     List<Trade> getRunningTrades(Date format);
+    void saveStartAndStopTime(String tickerName, int userId, Date start, Date stop);
+
+    /**
+     * Get all trade by user ticker id
+     * @param userTickerId id
+     * @return list of trades
+     */
+    List<Trade> findAllByUserTickerId(Long userTickerId);
 }
