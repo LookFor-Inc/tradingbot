@@ -36,9 +36,9 @@ public class TradeDeal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Date time;
+    private String time;
 
-    private BigDecimal price;
+    private String price;
 
     private long amount;
 

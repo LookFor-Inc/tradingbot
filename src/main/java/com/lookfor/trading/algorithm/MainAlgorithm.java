@@ -3,7 +3,9 @@ package com.lookfor.trading.algorithm;
 import com.lookfor.trading.models.AlgorithmCache;
 import com.lookfor.trading.models.TickerData;
 import com.lookfor.trading.models.Trade;
+import com.lookfor.trading.models.TradeDeal;
 import com.lookfor.trading.repositories.AlgorithmCacheRepository;
+import com.lookfor.trading.services.TradeDealService;
 import com.lookfor.trading.services.implementations.TickersDataServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -17,7 +19,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class MainAlgorithm {
-
+    private final TradeDealService tradeDealService;
     private final AlgorithmCacheRepository algorithmCacheRepository;
 
     static final int N = 14;
@@ -82,6 +84,13 @@ public class MainAlgorithm {
                 RSI = (100 - (100/ (1+ algorithmCache.getAvGain()/algorithmCache.getAvLoss())));
                 System.out.println(RSI);
                 if (RSI > 70){
+//                    TradeDeal.builder()
+//                            .time()
+//                            .type()
+//                            .price()
+//                            .amount()
+//                            .build();
+//                    tradeDealService.save();
                     //вызов метода на продажу акций (передача TickersDate)
                 } else if(RSI < 30){
                     // вызов метода на покупку (проверка на баланс, осуществления покупки)
