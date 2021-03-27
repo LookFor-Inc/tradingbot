@@ -43,12 +43,13 @@ public class MainAlgorithm {
         // algorithmCache.getLastTicketDate().getTime();
         String lastTime;
         if (algorithmCache.getLastTicketDate() == null) {
-            lastTime = trade.getStart().toString(); // ToDo переобразовать в формать HHmmss
+            lastTime="100000";
+            //lastTime = trade.getStart().toString(); // ToDo переобразовать в формать HHmmss
         } else {
             lastTime=algorithmCache.getLastTicketDate().getTime();
         }
 
-        String currentTime = "101010";
+        String currentTime = "121010";
         Calendar calendar = new GregorianCalendar();
         /*realTime
                 .concat(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)))
@@ -56,9 +57,12 @@ public class MainAlgorithm {
                 .concat(String.valueOf(calendar.get(Calendar.SECOND)));*/
 
         List<TickerData> tickerDataList = tickersDataService.getTickersDataAfterFirstTimeAndBeforeRealTime(lastTime, currentTime, trade.getUserTicker());
+        System.out.println(tickerDataList);
+        //System.out.println(tickersDataService.);
 
         if (algorithmCache.getLastTicketDate() == null) {
             algorithmCache.setLastTicketDate(tickerDataList.get(0));
+            algorithmCache.setId(String.valueOf(trade.getId()));
             tickerDataList.remove(0);
         }
 
@@ -67,11 +71,11 @@ public class MainAlgorithm {
             float change = Float.parseFloat(tickerDataList.get(i).getLastPrice()) - Float.parseFloat(algorithmCache.getLastTicketDate().getLastPrice());
 
             if (change > 0) {
-                algorithmCache.setAvGain((algorithmCache.getAvGain() * (i - 1) + change) / i);
-                algorithmCache.setAvLoss((float) (algorithmCache.getAvLoss() * (i - 1.0)/i));
+                algorithmCache.setAvGain((algorithmCache.getAvGain() * (i) + change) / (i+1));
+                algorithmCache.setAvLoss((float) (algorithmCache.getAvLoss() * (i)/(i+1)));
             } else {
-                algorithmCache.setAvGain((float) (algorithmCache.getAvGain() * (i - 1.0)/i));
-                algorithmCache.setAvLoss((algorithmCache.getAvLoss() * (i - 1) + change) / i);
+                algorithmCache.setAvGain((float) (algorithmCache.getAvGain() * (i)/(i+1)));
+                algorithmCache.setAvLoss((algorithmCache.getAvLoss() * (i) + change) / (i+1));
             }
 
             if (algorithmCache.getAllTicks()>N){
@@ -83,8 +87,8 @@ public class MainAlgorithm {
                     // вызов метода на покупку (проверка на баланс, осуществления покупки)
                 }
             }
-            algorithmCacheRepository.save(algorithmCache);
         }
+        algorithmCacheRepository.save(algorithmCache);
     }
 
 }

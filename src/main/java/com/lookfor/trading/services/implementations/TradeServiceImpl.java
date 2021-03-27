@@ -33,12 +33,6 @@ public class TradeServiceImpl implements TradeService {
         }
 
         UserTicker userTicker = userTickerOptional.get();
-        start.setDate(userTicker.getDate().getDate());
-        start.setMonth(userTicker.getDate().getMonth());
-        start.setYear(userTicker.getDate().getYear());
-        stop.setDate(userTicker.getDate().getDate());
-        stop.setMonth(userTicker.getDate().getMonth());
-        stop.setYear(userTicker.getDate().getYear());
 
         if (tradeRepository.existsByStartAndStopAndUserTicker(start, stop, userTicker)) {
             throw new IncorrectRequestException("❌ This trade is already added ❌");

@@ -19,9 +19,9 @@ public class TradeScheduler {
 
     @Scheduled(fixedRate = 1000)
     public void checkTrades() throws ParseException {
-        SimpleDateFormat currentTime = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
+        SimpleDateFormat currentTime = new SimpleDateFormat("1970-01-01 HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        String format = "2021-01-21 11:15:11";
+        String format = "1970-01-01 11:15:11";
         Date date1 = currentTime.parse(format);
         List<Trade> tradeList = tradeService.getRunningTrades(date1);//currentTime.format(date));
 
