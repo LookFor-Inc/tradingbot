@@ -32,7 +32,7 @@ public class Trade {
 
     private boolean status;
 
-    // private long totalAmount;
+    private long totalAmount;
 
     @ManyToOne
     private UserTicker userTicker;

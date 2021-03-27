@@ -15,27 +15,28 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
-public class MainAlgorithm {
+public class TradeAlgorithm {
     private final TradeDealService tradeDealService;
     private final TradeService tradeService;
     private final AlgorithmCacheRepository algorithmCacheRepository;
+    private final TickersDataServiceImpl tickersDataService;
 
     static final int N = 14;
 
-    private final TickersDataServiceImpl tickersDataService;
-
+    /**
+     * Async algorithm for trading
+     *
+     * @param trade source
+     */
     @Async
     public void doTask(Trade trade) {
         Optional<AlgorithmCache> algorithmCacheOptional = algorithmCacheRepository.findById(String.valueOf(trade.getId()));
         AlgorithmCache algorithmCache;
-        if (algorithmCacheOptional.isEmpty()){
+        if (algorithmCacheOptional.isEmpty()) {
             algorithmCache = new AlgorithmCache();
         } else {
             algorithmCache = algorithmCacheOptional.get();
@@ -44,26 +45,24 @@ public class MainAlgorithm {
         StringBuilder startTimeCurrentFormat = new StringBuilder();
         if (algorithmCache.getTime() == null) {
             StringBuilder startTimeBadFormat = new StringBuilder(trade.getStart().toString().split(" ")[1].split("\\.")[0]);
-            for (String str: startTimeBadFormat.toString().split(":")){
+            for (String str : startTimeBadFormat.toString().split(":")) {
                 startTimeCurrentFormat.append(str);
             }
         } else {
             startTimeCurrentFormat.append(algorithmCache.getTime());
         }
 
-        String currentTime = "";
+        StringBuilder currentTime = new StringBuilder();
         Calendar calendar = new GregorianCalendar();
-        currentTime
-                .concat(String.valueOf(calendar.get(Calendar.HOUR_OF_DAY)))
-                .concat(String.valueOf(calendar.get(Calendar.MINUTE)))
-                .concat(String.valueOf(calendar.get(Calendar.SECOND)));
 
-        currentTime = "121212"; //ToDo убрать заглушку
-        startTimeCurrentFormat = new StringBuilder("100000"); //Todo убрать загрушку
-        List<TickerData> tickerDataList = tickersDataService.getTickersDataAfterFirstTimeAndBeforeRealTime(startTimeCurrentFormat.toString(), currentTime, trade.getUserTicker());
+        currentTime.append(calendar.get(Calendar.HOUR_OF_DAY))
+                .append(calendar.get(Calendar.MINUTE))
+                .append(calendar.get(Calendar.SECOND));
 
-        if (algorithmCache.getTime()==null && algorithmCache.getDate() == null && algorithmCache.getLastPrice()==null && tickerDataList.size()!=0) {
-            TickerData lastTickerDate=tickerDataList.get(0);
+        List<TickerData> tickerDataList = tickersDataService.getTickersDataAfterFirstTimeAndBeforeRealTime(startTimeCurrentFormat.toString(), currentTime.toString(), trade.getUserTicker());
+
+        if (algorithmCache.getTime() == null && algorithmCache.getDate() == null && algorithmCache.getLastPrice() == null && tickerDataList.size() != 0) {
+            TickerData lastTickerDate = tickerDataList.get(0);
             algorithmCache.setDate(lastTickerDate.getDate());
             algorithmCache.setLastPrice(lastTickerDate.getLastPrice().toString());
             algorithmCache.setTime(lastTickerDate.getTime());
@@ -84,28 +83,31 @@ public class MainAlgorithm {
                 algorithmCache.setAvLoss((algorithmCache.getAvLoss() * (algorithmCache.getAllTicks() - 1) + Math.abs(change)) / (algorithmCache.getAllTicks()));
             }
 
-            if (algorithmCache.getAllTicks()>N){
-                float RSI = (100 - (100/ (1+ algorithmCache.getAvGain()/algorithmCache.getAvLoss())));
-                // System.out.println(RSI);
+            if (algorithmCache.getAllTicks() > N) {
+                float RSI = (100 - (100 / (1 + algorithmCache.getAvGain() / algorithmCache.getAvLoss())));
+
                 if (RSI > 70) {
                     BigDecimal price = new BigDecimal(algorithmCache.getLastPrice());
-                    long amount = trade.getBalance().divide(price, RoundingMode.DOWN).longValue();
+                    long amount = trade.getTotalAmount();// getBalance().divide(price, RoundingMode.DOWN).longValue();
 
-                    algorithmCache.setTotalAmount(amount);
+                    if (amount != 0) {
+                        TradeDeal tradeDeal = TradeDeal.builder()
+                                .time(DateTimeUtil.dateToString(DateTimeUtil.getNowDate(), DateTimeUtil.PatternType.HH_MM_SS_TOG))
+                                .type(TradeDeal.Type.SALE)
+                                .price(price)
+                                .amount(amount)
+                                .trade(trade)
+                                .build();
 
-                    TradeDeal tradeDeal = TradeDeal.builder()
-                            .time(DateTimeUtil.dateToString(DateTimeUtil.getNowDate(), DateTimeUtil.PatternType.HH_MM_SS_TOG))
-                            .type(TradeDeal.Type.PURCHASE)
-                            .price(new BigDecimal(algorithmCache.getLastPrice()))
-                            .amount(amount)
-                            .trade(trade)
-                            .build();
 
-                    trade.setBalance(trade.getBalance().subtract(price.multiply(new BigDecimal(amount))));
-                    // trade.setTotalAmount(0);
-                    tradeDealService.save(tradeDeal);
+                        trade.setBalance(trade.getBalance().add(price.multiply(new BigDecimal(amount))));
+                        trade.setTotalAmount(0);
+                        tradeDeal.setBalance(trade.getBalance());
+                        tradeService.save(trade);
+                        tradeDealService.save(tradeDeal);
+                    }
                     //вызов метода на продажу акций (передача TickersDate)
-                } else if(RSI < 30){
+                } else if (RSI < 30) {
                     // вызов метода на покупку (проверка на баланс, осуществления покупки)
                     BigDecimal price = new BigDecimal(algorithmCache.getLastPrice());
                     long amount = trade.getBalance().divide(price, RoundingMode.DOWN).longValue();
@@ -114,18 +116,22 @@ public class MainAlgorithm {
                         TradeDeal tradeDeal = TradeDeal.builder()
                                 .time(DateTimeUtil.dateToString(DateTimeUtil.getNowDate(), DateTimeUtil.PatternType.HH_MM_SS_TOG))
                                 .type(TradeDeal.Type.PURCHASE)
-                                .price(new BigDecimal(algorithmCache.getLastPrice()))
+                                .price(price)
                                 .amount(amount)
                                 .trade(trade)
                                 .build();
 
                         trade.setBalance(trade.getBalance().subtract(price.multiply(new BigDecimal(amount))));
-                        // trade.setTotalAmount(trade.getTotalAmount() + amount);
+                        trade.setTotalAmount(trade.getTotalAmount() + amount);
+                        tradeDeal.setBalance(trade.getBalance());
                         tradeService.save(trade);
                         tradeDealService.save(tradeDeal);
                     }
                 }
             }
+            algorithmCache.setDate(tickerData.getDate());
+            algorithmCache.setLastPrice(tickerData.getLastPrice().toString());
+            algorithmCache.setTime(tickerData.getTime());
         }
         algorithmCacheRepository.save(algorithmCache);
     }

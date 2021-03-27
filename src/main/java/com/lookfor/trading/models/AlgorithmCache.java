@@ -17,7 +17,6 @@ public class AlgorithmCache implements Serializable {
     private String lastPrice;
     private String date;
     private String time;
-    private long totalAmount;
 
     public void incrementAllTicks(){
         allTicks++;
