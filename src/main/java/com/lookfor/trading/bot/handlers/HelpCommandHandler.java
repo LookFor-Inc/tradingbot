@@ -15,7 +15,14 @@ public class HelpCommandHandler implements RootCommandHandler<SendMessage> {
         return SendMessage.builder()
                 .chatId(String.valueOf(message.getChatId()))
                 .parseMode(ParseMode.MARKDOWN)
-                .text("I can help you!")
+                .text("""
+                      Here you can find all my *commands:*
+                      /upload - CSV file uploading 🎉
+                      /tools - show all available tickers (tools) 🛠
+                      /trade - start trading 📈
+                      /balance - show balance for every ticker 💰
+                      /download - export CSV file 📥 
+                      """)
                 .build();
     }
 }

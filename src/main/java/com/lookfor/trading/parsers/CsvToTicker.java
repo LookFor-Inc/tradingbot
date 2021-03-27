@@ -20,7 +20,7 @@ public class CsvToTicker {
             String line = reader.readLine();
 
             if (line == null || !line.equals(HEADER_PATTERN)) {
-                throw new IncorrectRequestException("Incorrect ticker file format!");
+                throw new IncorrectRequestException("❌ Incorrect ticker file format! ❌");
             }
             line = reader.readLine();
             String[] arr = null;
@@ -38,7 +38,7 @@ public class CsvToTicker {
             }
 
             if (arr == null) {
-                throw new IncorrectRequestException("Internal converter error!");
+                throw new IncorrectRequestException("❌ Internal converter error! ❌");
             }
 
             builder
