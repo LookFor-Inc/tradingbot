@@ -3,6 +3,7 @@ package com.lookfor.trading.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -26,6 +27,7 @@ public class Trade {
 
     private Date stop;
 
+    @Digits(integer = 9, fraction = 9)
     private BigDecimal balance;
 
     private boolean status;

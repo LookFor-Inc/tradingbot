@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Component
 @RequiredArgsConstructor
-public class MessageSenderImp implements MessageSender {
+public class MessageSenderImpl implements MessageSender {
     private final TelegramBot telegramBot;
 
     @Override

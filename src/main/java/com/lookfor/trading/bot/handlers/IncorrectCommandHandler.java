@@ -16,9 +16,14 @@ public class IncorrectCommandHandler implements RootCommandHandler<SendMessage> 
                 .chatId(String.valueOf(message.getChatId()))
                 .parseMode(ParseMode.MARKDOWN)
                 .text("""
-                        I do not know this command😔
+                        I do not know this command 😔
                                         
                         Here you can find all my *commands:*
+                        /upload - CSV file uploading 🎉
+                        /tools - show all available tickers (tools) 🛠
+                        /trade - start trading 📈
+                        /balance - show balance for every ticker 💰
+                        /download - export CSV file 📥 
                         """
                 )
                 .build();
