@@ -7,6 +7,7 @@ import com.lookfor.trading.models.TradeDeal;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.services.TradeService;
 import com.lookfor.trading.services.UserTickerService;
+import com.lookfor.trading.utils.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import static com.lookfor.trading.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
-import static com.lookfor.trading.utils.TimeUtil.dateToString;
+import static com.lookfor.trading.utils.DateTimeUtil.dateToString;
 
 @Slf4j
 @Component
@@ -48,9 +49,9 @@ public class DownloadCommandHandler implements RootCommandHandler<SendMessage> {
                         sbResponse.append("You can download CSV file 👌\n");
                         trades.forEach(trade -> sbResponse
                                 .append("🗒 Available trades:\n")
-                                .append(dateToString(trade.getStart()))
+                                .append(dateToString(trade.getStart(), DateTimeUtil.PatternType.HH_MM_SS_COLON))
                                 .append("-")
-                                .append(dateToString(trade.getStop()))
+                                .append(dateToString(trade.getStop(), DateTimeUtil.PatternType.HH_MM_SS_COLON))
                                 .append("\n/download #")
                                 .append(trade.getId())
                                 .append("\n\n"));
