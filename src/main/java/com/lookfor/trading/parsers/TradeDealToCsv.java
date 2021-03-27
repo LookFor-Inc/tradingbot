@@ -28,7 +28,7 @@ public class TradeDealToCsv {
                     String.valueOf(price),
                     String.valueOf(amount.multiply(price)),
                     String.valueOf(amount),
-                    String.valueOf(tradeDeal.getTrade().getBalance())
+                    String.valueOf(tradeDeal.getBalance())
             });
         });
         for (String[] datum : data) {
