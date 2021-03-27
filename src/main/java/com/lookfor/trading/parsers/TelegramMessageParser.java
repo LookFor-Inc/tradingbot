@@ -5,6 +5,7 @@ import com.lookfor.trading.interfaces.RootCommandHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -38,6 +39,16 @@ public class TelegramMessageParser extends Thread {
                 );
                 try {
                     telegramBot.execute((SendMessage) method);
+                } catch (TelegramApiException exp) {
+                    log.error(exp.getMessage());
+                }
+            }
+            if (method instanceof SendDocument) {
+                log.info(String.format(
+                        "Send document to @%s (%s): '%s'", message.getFrom().getUserName(), message.getChatId(), ((SendDocument) method).getDocument())
+                );
+                try {
+                    telegramBot.execute((SendDocument) method);
                 } catch (TelegramApiException exp) {
                     log.error(exp.getMessage());
                 }

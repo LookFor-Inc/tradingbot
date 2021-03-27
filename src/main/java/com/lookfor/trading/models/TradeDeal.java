@@ -3,6 +3,7 @@ package com.lookfor.trading.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -36,9 +37,10 @@ public class TradeDeal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private Date time;
+    private String time;
 
-    private String price;
+    @Digits(integer = 9, fraction = 9)
+    private BigDecimal price;
 
     private long amount;
 

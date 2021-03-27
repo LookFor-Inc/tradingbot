@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.text.ParseException;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class CsvToTicker {
                 TickerData data = TickerData.builder()
                         .date(arr[2])
                         .time(arr[3])
-                        .lastPrice(arr[4])
+                        .lastPrice(new BigDecimal(arr[4]))
                         .build();
 
                 builder.data(data);
