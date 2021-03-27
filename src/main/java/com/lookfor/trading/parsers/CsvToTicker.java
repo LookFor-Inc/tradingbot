@@ -3,12 +3,14 @@ package com.lookfor.trading.parsers;
 import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.models.TickerData;
 import com.lookfor.trading.models.UserTicker;
-import com.lookfor.trading.utils.DateUtil;
+import com.lookfor.trading.utils.DateTimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.math.BigDecimal;
+import java.text.ParseException;
 
+@Slf4j
 @Component
 public class CsvToTicker {
     public static final String HEADER_PATTERN = "<TICKER>;<PER>;<DATE>;<TIME>;<LAST>;<VOL>";
@@ -43,9 +45,9 @@ public class CsvToTicker {
 
             builder
                     .name(arr[0])
-                    .date(DateUtil.stringToDate(arr[2]));
-        } catch (IOException e) {
-            e.printStackTrace();
+                    .date(DateTimeUtil.stringToDate(arr[2], DateTimeUtil.PatternType.YYYY_MM_DD_TOG));
+        } catch (ParseException | IOException exp) {
+            log.error(exp.getMessage());
         }
 
         return builder.build();

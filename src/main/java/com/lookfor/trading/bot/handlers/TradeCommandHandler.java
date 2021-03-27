@@ -4,7 +4,7 @@ import com.lookfor.trading.exceptions.IncorrectRequestException;
 import com.lookfor.trading.exceptions.UserNotFoundException;
 import com.lookfor.trading.interfaces.RootCommandHandler;
 import com.lookfor.trading.services.TradeService;
-import com.lookfor.trading.utils.TimeUtil;
+import com.lookfor.trading.utils.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public class TradeCommandHandler implements RootCommandHandler<SendMessage> {
                 List<String> tickerParams = Arrays.asList(Arrays.copyOfRange(restTextList, 2, restTextList.length).clone());
                 List<Date> convertedTime = new ArrayList<>();
                 for (String timeParam : timeParams) {
-                    Date date = TimeUtil.stringToDate(timeParam);
+                    Date date = DateTimeUtil.stringToDate(timeParam, DateTimeUtil.PatternType.HH_MM_SS_COLON);
                     convertedTime.add(date);
                 }
                 tickerParams.forEach(ticker ->

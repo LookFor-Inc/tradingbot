@@ -38,7 +38,7 @@ public class TradeDeal {
 
     private Date time;
 
-    private BigDecimal price;
+    private String price;
 
     private long amount;
 
