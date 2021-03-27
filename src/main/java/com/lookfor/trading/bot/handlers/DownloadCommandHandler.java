@@ -1,36 +1,45 @@
 package com.lookfor.trading.bot.handlers;
 
 import com.lookfor.trading.exceptions.IncorrectRequestException;
+import com.lookfor.trading.interfaces.MessageSender;
 import com.lookfor.trading.interfaces.RootCommandHandler;
 import com.lookfor.trading.models.Trade;
 import com.lookfor.trading.models.TradeDeal;
 import com.lookfor.trading.models.UserTicker;
+import com.lookfor.trading.parsers.TradeDealToCsv;
 import com.lookfor.trading.services.TradeService;
 import com.lookfor.trading.services.UserTickerService;
 import com.lookfor.trading.utils.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static com.lookfor.trading.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
 import static com.lookfor.trading.utils.DateTimeUtil.dateToString;
+import static com.lookfor.trading.utils.TextMessageUtil.getRestOfTextMessageWithoutCommand;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DownloadCommandHandler implements RootCommandHandler<SendMessage> {
+public class DownloadCommandHandler implements RootCommandHandler<SendDocument> {
     private final UserTickerService userTickerService;
     private final TradeService tradeService;
+    private final TradeDealToCsv tradeDealToCsv;
+
+    private final MessageSender messageSender;
 
     @Override
-    public SendMessage doParse(Update update) {
+    public SendDocument doParse(Update update) throws TelegramApiException {
         Message message = getReceivedMessage(update);
         String restOfTextMessage = getRestOfTextMessageWithoutCommand(message.getText());
         StringBuilder sbResponse = new StringBuilder();
@@ -62,8 +71,17 @@ public class DownloadCommandHandler implements RootCommandHandler<SendMessage> {
             try {
                 long tradeId = Long.parseLong(restOfTextMessage.substring(1));
                 Set<TradeDeal> tradeDeals = tradeService.findAllTradeDealsByTradeId(tradeId);
-                tradeDeals.forEach(tradeDeal -> sbResponse.append(tradeDeal.getId()).append(" ").append(tradeDeal.getPrice()));
-            } catch (NumberFormatException | EntityNotFoundException | IncorrectRequestException exp) {
+                File csvFile = tradeDealToCsv.convert(tradeDeals);
+                InputFile inputFile = new InputFile();
+                inputFile.setMedia(csvFile);
+
+                SendDocument sendDocument = new SendDocument();
+                sendDocument.setChatId(String.valueOf(message.getChatId()));
+                sendDocument.setReplyToMessageId(message.getMessageId());
+                sendDocument.setDocument(new InputFile(csvFile, "export.csv"));
+
+                return sendDocument;
+            } catch (NumberFormatException | EntityNotFoundException | IncorrectRequestException | IOException exp) {
                 log.error(exp.getMessage());
                 sbResponse.append(exp.getMessage());
             }
@@ -71,9 +89,7 @@ public class DownloadCommandHandler implements RootCommandHandler<SendMessage> {
             sbResponse.append("‼️ Send command /download <trade id> to export CSV file ‼️");
         }
 
-        return SendMessage.builder()
-                .chatId(String.valueOf(message.getChatId()))
-                .text(sbResponse.toString())
-                .build();
+        messageSender.sendToUser(message.getFrom().getId(), sbResponse.toString());
+        return null;
     }
 }
