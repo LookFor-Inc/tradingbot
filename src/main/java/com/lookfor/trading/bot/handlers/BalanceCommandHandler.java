@@ -1,6 +1,7 @@
 package com.lookfor.trading.bot.handlers;
 
 import com.lookfor.trading.interfaces.RootCommandHandler;
+import com.lookfor.trading.models.Trade;
 import com.lookfor.trading.models.UserTicker;
 import com.lookfor.trading.services.TradeService;
 import com.lookfor.trading.services.UserTickerService;
@@ -28,20 +29,25 @@ public class BalanceCommandHandler implements RootCommandHandler<SendMessage> {
 
         List<UserTicker> userTickers = userTickerService.findAllByUserId(message.getFrom().getId());
         if (userTickers.isEmpty()) {
-            sbResponse.append("You do not have any available tickers");
+            sbResponse.append("😔 You do not have any available tickers 😔");
         } else {
             userTickers.forEach(ticker -> {
                 sbResponse
+                        .append("📈 ")
                         .append(ticker.getName())
                         .append("\n");
-                tradeService.findAllByUserTickerId(ticker.getId())
-                        .forEach(trade -> sbResponse
-                                .append(trade.getStart())
-                                .append(" ")
-                                .append(trade.getStop())
-                                .append(" ")
-                                .append(trade.getBalance())
-                                .append("\n"));
+                List<Trade> trades = tradeService.findAllByUserTickerId(ticker.getId());
+                if (trades.isEmpty()) {
+                    sbResponse.append("You do not have any trades for this ticker\n");
+                } else {
+                    trades.forEach(trade -> sbResponse
+                            .append(trade.getStart())
+                            .append(" ")
+                            .append(trade.getStop())
+                            .append(" ")
+                            .append(trade.getBalance())
+                            .append("\n"));
+                }
             });
         }
         return SendMessage.builder()

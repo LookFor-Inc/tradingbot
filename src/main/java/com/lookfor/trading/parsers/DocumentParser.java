@@ -29,18 +29,16 @@ public class DocumentParser {
             File filePath = getFilePath(bot, fileId);
 
             if (!filePath.getFilePath().endsWith(".csv")) {
-                bot.sendToUser(userId, "Wrong file format, csv required!");
+                bot.sendToUser(userId, "❌ Wrong file format, csv required! ❌");
                 return;
             }
 
             var csv = bot.downloadFile(filePath);
             UserTicker userTicker = converter.convert(csv);
 
-            Optional<UserTicker> userTickerOptional = userTickerService.findUserTickerByName(userTicker.getName());
-
-            if (userTickerOptional.isPresent()) {
+            if (userTickerService.existsByUserAndName(userId, userTicker.getName())) {
                 bot.sendToUser(userId,
-                        String.format("You can not upload multiple csv with the same ticker name: %s!", userTicker.getName())
+                        String.format("❌ You can't upload multiple CSV files with the same ticker name\n*%s*! ❌", userTicker.getName())
                 );
                 return;
             }
@@ -48,10 +46,10 @@ public class DocumentParser {
             boolean status = userTickerService.save(converter.convert(csv), userId);
 
             if (status) {
-                bot.sendToUser(userId, "Ticker successfully saved!");
+                bot.sendToUser(userId, "Ticker successfully saved! ✅");
             }
         } catch (TelegramApiException e) {
-            bot.sendToUser(userId, "Oops! Error processing your file :(");
+            bot.sendToUser(userId, "⚠️ Oops! Error processing your file ⚠️");
         } catch (IncorrectRequestException e) {
             bot.sendToUser(userId, e.getMessage());
         }
