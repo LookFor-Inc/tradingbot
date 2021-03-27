@@ -3,6 +3,7 @@ package com.lookfor.trading.models;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 
 /**
@@ -28,5 +29,6 @@ public class TickerData {
 
     private String time;
 
-    private String lastPrice;
+    @Digits(integer = 9, fraction = 9)
+    private BigDecimal lastPrice;
 }

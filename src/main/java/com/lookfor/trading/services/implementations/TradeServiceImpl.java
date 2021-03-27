@@ -95,4 +95,10 @@ public class TradeServiceImpl implements TradeService {
         }
         return tradeDeals;
     }
+
+    @Override
+    @Transactional
+    public void save(Trade trade) {
+        tradeRepository.save(trade);
+    }
 }

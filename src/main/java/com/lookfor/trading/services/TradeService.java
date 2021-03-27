@@ -39,4 +39,6 @@ public interface TradeService {
      * @return all trade deals
      */
     Set<TradeDeal> findAllTradeDealsByTradeId(long tradeId) throws EntityNotFoundException;
+
+    void save(Trade trade);
 }
